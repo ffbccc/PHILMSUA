@@ -58,6 +58,32 @@
             transition: margin-left 0.5s;
             padding: 16px;
             width: 100%;
+            overflow-y: auto; /* Додаємо прокрутку */
+            height: calc(100vh - 80px); /* Висота без кнопок */
+        }
+
+        /* Стиль для навігаційних кнопок (категорій) */
+        .nav-btns {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .nav-btn {
+            background-color: #4a76a8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            width: 150px;
+            text-align: center;
+        }
+
+        .nav-btn:hover {
+            background-color: #557eab;
         }
 
         /* Контейнер для контенту */
@@ -67,7 +93,7 @@
             border-radius: 10px;
             padding: 20px;
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             margin: auto;
         }
@@ -75,22 +101,6 @@
         h1, h2 {
             color: #ffffff;
             margin-bottom: 20px;
-        }
-
-        .btn {
-            background-color: #4a76a8;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 5px;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: #557eab;
         }
 
         .socials a {
@@ -102,15 +112,6 @@
 
         .socials a:hover {
             color: #557eab;
-        }
-
-        .menu-icon {
-            font-size: 30px;
-            color: #ffffff;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            cursor: pointer;
         }
 
         .movie-section {
@@ -137,6 +138,10 @@
             width: 100%;
         }
 
+        .hidden {
+            display: none;
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 20px;
@@ -160,26 +165,40 @@
     <!-- Бічна панель -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="javascript:void(0)" onclick="loadPopularMovies()">Популярне</a>
-        <a href="#">Завдання</a>
+        <a href="javascript:void(0)" onclick="showSection('movies')">Фільми</a>
+        <a href="javascript:void(0)" onclick="showSection('series')">Серіали</a>
+        <a href="javascript:void(0)" onclick="showSection('cartoons')">Мультфільми</a>
+        <a href="javascript:void(0)" onclick="showSection('anime')">Аніме</a>
     </div>
 
     <!-- Основний контент сайту -->
     <div id="main" class="main-content">
-        <div id="popular-content" class="container">
-            <h1>PHILMSUA - Telegram Бот з Фільмами</h1>
-            <p>Переглядайте фільми, серіали та аніме з нашого бота у Telegram!</p>
-            <button class="btn" onclick="window.open('https://t.me/PHILMSUAbot', '_blank')">Почати</button>
+        <div class="nav-btns">
+            <button class="nav-btn" onclick="showSection('movies')">Фільми</button>
+            <button class="nav-btn" onclick="showSection('series')">Серіали</button>
+            <button class="nav-btn" onclick="showSection('cartoons')">Мультфільми</button>
+            <button class="nav-btn" onclick="showSection('anime')">Аніме</button>
+        </div>
 
-            <div class="socials">
-                <h2>Соціальні мережі:</h2>
-                <a href="https://t.me/your_channel" target="_blank">Telegram</a>
-                <a href="https://facebook.com/your_page" target="_blank">Facebook</a>
-                <a href="https://twitter.com/your_profile" target="_blank">Twitter</a>
-                <a href="https://instagram.com/your_profile" target="_blank">Instagram</a>
-            </div>
+        <!-- Розділи для різних категорій -->
+        <div id="movies" class="container movie-section">
+            <h2>Топ Фільмів</h2>
+            <div class="movie-list" id="movie-sections"></div>
+        </div>
 
-            <div id="movie-sections" class="movie-section"></div>
+        <div id="series" class="container movie-section hidden">
+            <h2>Топ Серіалів</h2>
+            <div class="movie-list" id="series-sections"></div>
+        </div>
+
+        <div id="cartoons" class="container movie-section hidden">
+            <h2>Топ Мультфільмів</h2>
+            <div class="movie-list" id="cartoons-sections"></div>
+        </div>
+
+        <div id="anime" class="container movie-section hidden">
+            <h2>Топ Аніме</h2>
+            <div class="movie-list" id="anime-sections"></div>
         </div>
     </div>
 
@@ -197,23 +216,28 @@
             document.getElementById("main").style.marginLeft = "0";
         }
 
+        /* Показати конкретну секцію */
+        function showSection(sectionId) {
+            document.querySelectorAll('.container').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
         /* Завантаження популярних фільмів, серіалів, аніме та мультфільмів */
         async function loadPopularMovies() {
             const movieSections = document.getElementById('movie-sections');
             movieSections.innerHTML = ''; // Очищуємо секцію перед додаванням контенту
 
             // Функція для створення секції з фільмами
-            async function fetchMovies(url, title) {
+            async function fetchMovies(url, sectionId) {
                 const res = await fetch(url);
                 const data = await res.json();
                 const movies = data.results;
 
-                const section = document.createElement('div');
-                section.innerHTML = `<h2>${title}</h2>`;
-                
-                const movieList = document.createElement('div');
-                movieList.className = 'movie-list';
-                
+                const movieList = document.getElementById(sectionId);
+                movieList.innerHTML = '';
+
                 movies.forEach(movie => {
                     const movieItem = document.createElement('div');
                     movieItem.className = 'movie-item';
@@ -223,17 +247,16 @@
                     `;
                     movieList.appendChild(movieItem);
                 });
-
-                section.appendChild(movieList);
-                movieSections.appendChild(section);
             }
 
-            // Завантаження топ фільмів, серіалів, аніме та мультфільмів
-            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`, 'Топ Фільмів');
-            fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'Топ Серіалів');
-            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'Топ Аніме');
-            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'Топ Мультфільмів');
+            // Завантаження фільмів для кожної категорії
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`, 'movie-sections');
+            fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'series-sections');
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'cartoons-sections');
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'anime-sections');
         }
+
+        loadPopularMovies(); // Викликати функцію для завантаження фільмів
     </script>
 </body>
 </html>
