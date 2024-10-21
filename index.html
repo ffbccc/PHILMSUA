@@ -17,13 +17,6 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            animation: fadeIn 1s; /* Анімація появи */
-        }
-
-        /* Анімація появи */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         /* Стилі для бічної панелі */
@@ -60,66 +53,44 @@
             font-size: 36px;
         }
 
-        /* Відступ для основного контенту при відкритій панелі */
+        /* Основний контент */
         .main-content {
             transition: margin-left 0.5s;
             padding: 16px;
             width: 100%;
         }
 
-        /* Контейнер для основного контенту */
+        /* Контейнер для контенту */
         .container {
             text-align: center;
-            background-color: #1f2328; /* Темний блок для контенту */
+            background-color: #1f2328;
             border-radius: 10px;
             padding: 20px;
             width: 90%;
             max-width: 600px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             margin: auto;
-            transform: translateY(-20px); /* Початкова позиція */
-            animation: slideIn 0.5s forwards; /* Анімація зсуву */
         }
 
-        /* Анімація зсуву */
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        h1 {
-            font-size: 24px;
+        h1, h2 {
             color: #ffffff;
             margin-bottom: 20px;
-            transition: transform 0.3s; /* Анімація для заголовка */
         }
 
-        h1:hover {
-            transform: scale(1.05); /* Збільшення при наведенні */
-        }
-
-        /* Стилі для кнопки */
         .btn {
-            background-color: #4a76a8; /* Колір кнопки у стилі Telegram */
+            background-color: #4a76a8;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s; /* Анімації для кнопки */
             margin: 5px;
             width: 100%;
         }
 
         .btn:hover {
             background-color: #557eab;
-            transform: scale(1.05); /* Збільшення при наведенні */
-        }
-
-        /* Соціальні мережі */
-        .socials {
-            margin-top: 20px;
         }
 
         .socials a {
@@ -127,14 +98,12 @@
             text-decoration: none;
             margin: 0 10px;
             font-size: 20px;
-            transition: color 0.3s; /* Анімація для соціальних мереж */
         }
 
         .socials a:hover {
-            color: #557eab; /* Зміна кольору при наведенні */
+            color: #557eab;
         }
 
-        /* Стилі для іконки меню */
         .menu-icon {
             font-size: 30px;
             color: #ffffff;
@@ -144,42 +113,64 @@
             cursor: pointer;
         }
 
-        /* Медіа-запити для адаптації на мобільних пристроях */
+        .movie-section {
+            margin-top: 20px;
+        }
+
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .movie-item {
+            background-color: #333;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 10px;
+            width: 150px;
+            text-align: center;
+        }
+
+        .movie-item img {
+            border-radius: 10px;
+            width: 100%;
+        }
+
         @media (max-width: 600px) {
             h1 {
-                font-size: 20px; /* Зменшення розміру заголовка на мобільних */
+                font-size: 20px;
             }
 
             .btn {
-                font-size: 14px; /* Зменшення розміру тексту кнопки на мобільних */
-                padding: 10px; /* Зменшення відступів кнопки */
+                font-size: 14px;
             }
 
             .socials a {
-                font-size: 18px; /* Зменшення розміру тексту для посилань на мобільних */
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Іконка меню для відкриття бічної панелі -->
+    <!-- Іконка меню -->
     <span class="menu-icon" onclick="openNav()">&#9776;</span>
 
     <!-- Бічна панель -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">Популярне</a>
+        <a href="javascript:void(0)" onclick="loadPopularMovies()">Популярне</a>
         <a href="#">Завдання</a>
     </div>
 
     <!-- Основний контент сайту -->
     <div id="main" class="main-content">
-        <div class="container">
+        <div id="popular-content" class="container">
             <h1>PHILMSUA - Telegram Бот з Фільмами</h1>
             <p>Переглядайте фільми, серіали та аніме з нашого бота у Telegram!</p>
-            <button class="btn" onclick="window.open('https://t.me/PHILMSUA1_bot', '_blank')">Почати</button>
-            
+            <button class="btn" onclick="window.open('https://t.me/PHILMSUAbot', '_blank')">Почати</button>
+
             <div class="socials">
                 <h2>Соціальні мережі:</h2>
                 <a href="https://t.me/your_channel" target="_blank">Telegram</a>
@@ -187,22 +178,62 @@
                 <a href="https://twitter.com/your_profile" target="_blank">Twitter</a>
                 <a href="https://instagram.com/your_profile" target="_blank">Instagram</a>
             </div>
+
+            <div id="movie-sections" class="movie-section"></div>
         </div>
     </div>
 
     <script>
-        /* Відкриття бічної панелі */
+        const apiKey = 'YOUR_TMDB_API_KEY'; // Замініть на ваш ключ TMDb API
+
+        /* Відкриття та закриття бічної панелі */
         function openNav() {
             document.getElementById("mySidebar").style.width = "250px";
             document.getElementById("main").style.marginLeft = "250px";
         }
 
-        /* Закриття бічної панелі */
         function closeNav() {
             document.getElementById("mySidebar").style.width = "0";
             document.getElementById("main").style.marginLeft = "0";
         }
-    </script>
 
+        /* Завантаження популярних фільмів, серіалів, аніме та мультфільмів */
+        async function loadPopularMovies() {
+            const movieSections = document.getElementById('movie-sections');
+            movieSections.innerHTML = ''; // Очищуємо секцію перед додаванням контенту
+
+            // Функція для створення секції з фільмами
+            async function fetchMovies(url, title) {
+                const res = await fetch(url);
+                const data = await res.json();
+                const movies = data.results;
+
+                const section = document.createElement('div');
+                section.innerHTML = `<h2>${title}</h2>`;
+                
+                const movieList = document.createElement('div');
+                movieList.className = 'movie-list';
+                
+                movies.forEach(movie => {
+                    const movieItem = document.createElement('div');
+                    movieItem.className = 'movie-item';
+                    movieItem.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <p>${movie.title || movie.name}</p>
+                    `;
+                    movieList.appendChild(movieItem);
+                });
+
+                section.appendChild(movieList);
+                movieSections.appendChild(section);
+            }
+
+            // Завантаження топ фільмів, серіалів, аніме та мультфільмів
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`, 'Топ Фільмів');
+            fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'Топ Серіалів');
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'Топ Аніме');
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'Топ Мультфільмів');
+        }
+    </script>
 </body>
 </html>
