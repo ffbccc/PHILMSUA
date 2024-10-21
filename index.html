@@ -3,21 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHILMSUA - Збереження Статистики</title>
+    <title>PHILMSUA - Статистика з TMDb</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #2a2f35;
             color: #d1d1d1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #ffffff;
+            margin: 20px 0;
+        }
+
+        .section {
+            padding: 20px;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .btn {
+            display: block;
             background-color: #4a76a8;
             color: white;
             padding: 10px 20px;
@@ -25,25 +37,73 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin: 5px;
+            margin: 20px auto;
+            text-align: center;
+            width: 200px;
         }
 
         .btn:hover {
             background-color: #557eab;
         }
 
-        h1 {
-            color: #ffffff;
+        /* Стиль для розділів фільми, серіали, аніме, мультфільми */
+        .category {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #444;
         }
+
+        .category h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .category ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .category ul li {
+            background-color: #3b3f45;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .category ul li:nth-child(even) {
+            background-color: #44484e;
+        }
+
     </style>
 </head>
 <body>
 
     <h1>Завантаження статистики з TMDb</h1>
-    <button class="btn" onclick="downloadStats()">Завантажити статистику</button>
+    <button class="btn" onclick="loadStats()">Завантажити статистику</button>
+
+    <div class="content">
+        <div id="movies" class="category section">
+            <h2>Фільми</h2>
+            <ul></ul>
+        </div>
+
+        <div id="series" class="category section">
+            <h2>Серіали</h2>
+            <ul></ul>
+        </div>
+
+        <div id="anime" class="category section">
+            <h2>Аніме</h2>
+            <ul></ul>
+        </div>
+
+        <div id="cartoons" class="category section">
+            <h2>Мультфільми</h2>
+            <ul></ul>
+        </div>
+    </div>
 
     <script>
-        const apiKey = '401d0beb7a9921aab51e75a21ec538f9'; // Замініть на ваш ключ TMDb API
+        const apiKey = '401d0beb7a9921aab51e75a21ec538f9'; // Ваш ключ TMDb API
 
         async function fetchMovies(url) {
             const res = await fetch(url);
@@ -51,47 +111,50 @@
             return data.results;
         }
 
-        async function downloadStats() {
-            let content = "Статистика про Фільми, Серіали, Аніме та Мультфільми:\n\n";
+        async function loadStats() {
+            const movieSection = document.querySelector("#movies ul");
+            const seriesSection = document.querySelector("#series ul");
+            const animeSection = document.querySelector("#anime ul");
+            const cartoonsSection = document.querySelector("#cartoons ul");
+
+            // Очищення старих даних перед завантаженням нових
+            movieSection.innerHTML = '';
+            seriesSection.innerHTML = '';
+            animeSection.innerHTML = '';
+            cartoonsSection.innerHTML = '';
 
             const movies = await fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`);
             const series = await fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`);
             const anime = await fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`);
             const cartoons = await fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`);
 
-            // Додаємо інформацію про фільми
-            content += "Популярні Фільми:\n";
+            // Виводимо Фільми
             movies.forEach(movie => {
-                content += `- Назва: ${movie.title}, Рейтинг: ${movie.vote_average}\n`;
+                const li = document.createElement('li');
+                li.textContent = `Назва: ${movie.title}, Рейтинг: ${movie.vote_average}`;
+                movieSection.appendChild(li);
             });
 
-            // Додаємо інформацію про серіали
-            content += "\nПопулярні Серіали:\n";
+            // Виводимо Серіали
             series.forEach(tv => {
-                content += `- Назва: ${tv.name}, Рейтинг: ${tv.vote_average}\n`;
+                const li = document.createElement('li');
+                li.textContent = `Назва: ${tv.name}, Рейтинг: ${tv.vote_average}`;
+                seriesSection.appendChild(li);
             });
 
-            // Додаємо інформацію про аніме
-            content += "\nПопулярні Аніме:\n";
+            // Виводимо Аніме
             anime.forEach(anim => {
-                content += `- Назва: ${anim.title}, Рейтинг: ${anim.vote_average}\n`;
+                const li = document.createElement('li');
+                li.textContent = `Назва: ${anim.title}, Рейтинг: ${anim.vote_average}`;
+                animeSection.appendChild(li);
             });
 
-            // Додаємо інформацію про мультфільми
-            content += "\nПопулярні Мультфільми:\n";
+            // Виводимо Мультфільми
             cartoons.forEach(cartoon => {
-                content += `- Назва: ${cartoon.title}, Рейтинг: ${cartoon.vote_average}\n`;
+                const li = document.createElement('li');
+                li.textContent = `Назва: ${cartoon.title}, Рейтинг: ${cartoon.vote_average}`;
+                cartoonsSection.appendChild(li);
             });
-
-            // Створення текстового файлу
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'movie_stats.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
         }
     </script>
 
