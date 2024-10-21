@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт з рекламою у стилі Telegram</title>
+    <title>PHILMSUA - Telegram Бот з Фільмами</title>
     <style>
         /* Загальні стилі для темної теми */
         body {
@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
         }
@@ -25,7 +25,7 @@
             border-radius: 10px;
             padding: 20px;
             width: 90%;
-            max-width: 400px;
+            max-width: 600px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         }
 
@@ -45,38 +45,26 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin: 5px;
         }
 
         .btn:hover {
             background-color: #557eab;
         }
 
-        /* Відео блок */
-        .video-container {
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #30363d;
-            border-radius: 5px;
-            height: 250px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #d1d1d1;
-            border: 1px solid #4a4a4a;
+        /* Соціальні мережі */
+        .socials {
+            margin-top: 20px;
         }
 
-        video {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 5px;
-        }
-
-        /* Стилі для посилань */
-        a {
+        .socials a {
             color: #4a76a8;
             text-decoration: none;
+            margin: 0 10px;
+            font-size: 20px;
         }
-        a:hover {
+
+        .socials a:hover {
             text-decoration: underline;
         }
     </style>
@@ -84,31 +72,18 @@
 <body>
 
     <div class="container">
-        <h1>Перегляньте рекламу, щоб отримати код</h1>
-
-        <!-- Блок для відеореклами -->
-        <div class="video-container">
-            <video id="adVideo" controls>
-                <source src="your-video-file.mp4" type="video/mp4"> <!-- Вставте URL вашого відеофайлу -->
-                Ваш браузер не підтримує відео.
-            </video>
+        <h1>PHILMSUA - Telegram Бот з Фільмами</h1>
+        <p>Переглядайте фільми, серіали та аніме з нашого бота у Telegram!</p>
+        <button class="btn" onclick="window.open('https://t.me/PHILMSUAbot', '_blank')">Почати</button>
+        
+        <div class="socials">
+            <h2>Соціальні мережі:</h2>
+            <a href="https://t.me/+rJzc8E1UXz5hMGMy" target="_blank">Telegram</a>
+            <a href="https://t.me/PHILMSUA1_bot" target="_blank">Bot</a>
+            <a href="https://twitter.com/your_profile" target="_blank">Twitter</a>
+            <a href="https://instagram.com/your_profile" target="_blank">Instagram</a>
         </div>
-
-        <!-- Кнопка для підтвердження перегляду реклами -->
-        <button class="btn" onclick="confirmAdViewed()">Підтвердити перегляд</button>
     </div>
 
-    <script>
-        // JavaScript для підтвердження перегляду реклами
-        function confirmAdViewed() {
-            const video = document.getElementById('adVideo');
-            if (video.currentTime >= video.duration) {
-                alert("Перегляд реклами підтверджено!");
-                // Сюди можна додати логіку для відправки на сервер
-            } else {
-                alert("Будь ласка, перегляньте рекламу до кінця!");
-            }
-        }
-    </script>
 </body>
 </html>
