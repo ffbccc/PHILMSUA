@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт з рекламою у стилі Telegram</title>
+    <style>
+        /* Загальні стилі для темної теми */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2a2f35; /* Темний фон як у Telegram */
+            color: #d1d1d1; /* Світлий текст */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Контейнер для контенту */
+        .container {
+            text-align: center;
+            background-color: #1f2328; /* Темний блок для контенту */
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        /* Стилі для кнопки */
+        .btn {
+            background-color: #4a76a8; /* Колір кнопки у стилі Telegram */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #557eab;
+        }
+
+        /* Рекламний блок */
+        .ads-container {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #30363d;
+            border-radius: 5px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #d1d1d1;
+            border: 1px solid #4a4a4a;
+        }
+
+        /* Стилі для посилань */
+        a {
+            color: #4a76a8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <!-- Додавання бібліотеки AdMob -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-app-pub-2244537573400519~3363290893", // Ідентифікатор додатка
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Перегляньте рекламу, щоб отримати код</h1>
+
+        <!-- Блок для показу реклами -->
+        <div class="ads-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-app-pub-2244537573400519"  <!-- Ідентифікатор клієнта AdMob -->
+                 data-ad-slot="1336927197"                    <!-- ID рекламного блоку -->
+                 data-ad-format="auto"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Кнопка для підтвердження перегляду реклами -->
+        <button class="btn" onclick="confirmAdViewed()">Підтвердити перегляд</button>
+    </div>
+
+    <script>
+        // JavaScript для підтвердження перегляду реклами
+        function confirmAdViewed() {
+            alert("Перегляд реклами підтверджено!");
+            // Сюди можна додати логіку для відправки на сервер
+        }
+    </script>
+</body>
+</html>
