@@ -16,6 +16,14 @@
             flex-direction: column;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
+            animation: fadeIn 1s; /* Анімація появи */
+        }
+
+        /* Анімація появи */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Контейнер для контенту */
@@ -27,12 +35,26 @@
             width: 90%;
             max-width: 600px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            transform: translateY(-20px); /* Початкова позиція */
+            animation: slideIn 0.5s forwards; /* Анімація зсуву */
+        }
+
+        /* Анімація зсуву */
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         h1 {
             font-size: 24px;
             color: #ffffff;
             margin-bottom: 20px;
+            transition: transform 0.3s; /* Анімація для заголовка */
+        }
+
+        h1:hover {
+            transform: scale(1.05); /* Збільшення при наведенні */
         }
 
         /* Стилі для кнопки */
@@ -44,12 +66,14 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s; /* Анімації для кнопки */
             margin: 5px;
+            width: 100%;
         }
 
         .btn:hover {
             background-color: #557eab;
+            transform: scale(1.05); /* Збільшення при наведенні */
         }
 
         /* Соціальні мережі */
@@ -62,10 +86,27 @@
             text-decoration: none;
             margin: 0 10px;
             font-size: 20px;
+            transition: color 0.3s; /* Анімація для соціальних мереж */
         }
 
         .socials a:hover {
-            text-decoration: underline;
+            color: #557eab; /* Зміна кольору при наведенні */
+        }
+
+        /* Медіа-запити для адаптації на мобільних пристроях */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px; /* Зменшення розміру заголовка на мобільних */
+            }
+
+            .btn {
+                font-size: 14px; /* Зменшення розміру тексту кнопки на мобільних */
+                padding: 10px; /* Зменшення відступів кнопки */
+            }
+
+            .socials a {
+                font-size: 18px; /* Зменшення розміру тексту для посилань на мобільних */
+            }
         }
     </style>
 </head>
@@ -79,8 +120,8 @@
         <div class="socials">
             <h2>Соціальні мережі:</h2>
             <a href="https://t.me/+rJzc8E1UXz5hMGMy" target="_blank">Telegram</a>
-            <a href="https://t.me/PHILMSUA1_bot" target="_blank">Bot</a>
-            <a href="https://twitter.com/your_profile" target="_blank">Twitter</a>
+            <a href="https://t.me/PHILMSUA1_bot" target="_blank">Telegram_bot</a>
+            <a href="https://rt.pornhub.com/view_video.php?viewkey=ph5eac941ba4e9d" target="_blank">Цікаве</a>
             <a href="https://instagram.com/your_profile" target="_blank">Instagram</a>
         </div>
     </div>
