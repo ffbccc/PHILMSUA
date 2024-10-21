@@ -26,7 +26,48 @@
             to { opacity: 1; }
         }
 
-        /* Контейнер для контенту */
+        /* Стилі для бічної панелі */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #1f2328;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #d1d1d1;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
+
+        /* Відступ для основного контенту при відкритій панелі */
+        .main-content {
+            transition: margin-left 0.5s;
+            padding: 16px;
+            width: 100%;
+        }
+
+        /* Контейнер для основного контенту */
         .container {
             text-align: center;
             background-color: #1f2328; /* Темний блок для контенту */
@@ -93,6 +134,16 @@
             color: #557eab; /* Зміна кольору при наведенні */
         }
 
+        /* Стилі для іконки меню */
+        .menu-icon {
+            font-size: 30px;
+            color: #ffffff;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+        }
+
         /* Медіа-запити для адаптації на мобільних пристроях */
         @media (max-width: 600px) {
             h1 {
@@ -112,19 +163,46 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>PHILMSUA - Telegram Бот з Фільмами</h1>
-        <p>Переглядайте фільми, серіали та аніме з нашого бота у Telegram!</p>
-        <button class="btn" onclick="window.open('https://t.me/PHILMSUAbot', '_blank')">Почати</button>
-        
-        <div class="socials">
-            <h2>Соціальні мережі:</h2>
-            <a href="https://t.me/+rJzc8E1UXz5hMGMy" target="_blank">Telegram</a>
-            <a href="https://t.me/PHILMSUA1_bot" target="_blank">Telegram_bot</a>
-            <a href="https://rt.pornhub.com/view_video.php?viewkey=ph5eac941ba4e9d" target="_blank">Цікаве</a>
-            <a href="https://instagram.com/your_profile" target="_blank">Instagram</a>
+    <!-- Іконка меню для відкриття бічної панелі -->
+    <span class="menu-icon" onclick="openNav()">&#9776;</span>
+
+    <!-- Бічна панель -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Популярне</a>
+        <a href="#">Завдання</a>
+    </div>
+
+    <!-- Основний контент сайту -->
+    <div id="main" class="main-content">
+        <div class="container">
+            <h1>PHILMSUA - Telegram Бот з Фільмами</h1>
+            <p>Переглядайте фільми, серіали та аніме з нашого бота у Telegram!</p>
+            <button class="btn" onclick="window.open('https://t.me/PHILMSUA1_bot', '_blank')">Почати</button>
+            
+            <div class="socials">
+                <h2>Соціальні мережі:</h2>
+                <a href="https://t.me/your_channel" target="_blank">Telegram</a>
+                <a href="https://facebook.com/your_page" target="_blank">Facebook</a>
+                <a href="https://twitter.com/your_profile" target="_blank">Twitter</a>
+                <a href="https://instagram.com/your_profile" target="_blank">Instagram</a>
+            </div>
         </div>
     </div>
+
+    <script>
+        /* Відкриття бічної панелі */
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        /* Закриття бічної панелі */
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
 
 </body>
 </html>
