@@ -8,8 +8,8 @@
         /* Загальні стилі */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #2a2f35; 
-            color: #d1d1d1; 
+            background-color: #2a2f35;
+            color: #d1d1d1;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,6 +17,12 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+        }
+
+        .main-content {
+            height: calc(100vh - 50px);
+            overflow-y: scroll;
+            width: 100%;
         }
 
         .nav-btns {
@@ -50,7 +56,7 @@
             width: 90%;
             max-width: 800px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin: auto;
+            margin: 20px auto;
         }
 
         h2 {
@@ -86,13 +92,75 @@
             display: none;
         }
 
-        .main-content {
-            overflow-y: auto;
-            height: calc(100vh - 80px);
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #1f2328;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #d1d1d1;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
+
+        .menu-icon {
+            font-size: 30px;
+            color: #ffffff;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .btn {
+                font-size: 14px;
+            }
+
+            .socials a {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Іконка меню -->
+    <span class="menu-icon" onclick="openNav()">&#9776;</span>
+
+    <!-- Бічна панель -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="javascript:void(0)" onclick="loadPopularMovies()">Популярне</a>
+        <a href="#">Рейтинг</a>
+        <a href="#">Завдання</a>
+    </div>
 
     <!-- Основний контент сайту -->
     <div class="nav-btns">
@@ -102,29 +170,40 @@
         <button class="nav-btn" onclick="showSection('anime')">Аніме</button>
     </div>
 
-    <!-- Розділи для різних категорій -->
-    <div id="movies" class="container movie-section">
-        <h2>Топ Фільмів</h2>
-        <div class="movie-list" id="movie-sections"></div>
-    </div>
+    <div class="main-content">
+        <!-- Розділи для різних категорій -->
+        <div id="movies" class="container movie-section">
+            <h2>Топ Фільмів</h2>
+            <div class="movie-list" id="movie-sections"></div>
+        </div>
 
-    <div id="series" class="container movie-section hidden">
-        <h2>Топ Серіалів</h2>
-        <div class="movie-list" id="series-sections"></div>
-    </div>
+        <div id="series" class="container movie-section hidden">
+            <h2>Топ Серіалів</h2>
+            <div class="movie-list" id="series-sections"></div>
+        </div>
 
-    <div id="cartoons" class="container movie-section hidden">
-        <h2>Топ Мультфільмів</h2>
-        <div class="movie-list" id="cartoons-sections"></div>
-    </div>
+        <div id="cartoons" class="container movie-section hidden">
+            <h2>Топ Мультфільмів</h2>
+            <div class="movie-list" id="cartoons-sections"></div>
+        </div>
 
-    <div id="anime" class="container movie-section hidden">
-        <h2>Топ Аніме</h2>
-        <div class="movie-list" id="anime-sections"></div>
+        <div id="anime" class="container movie-section hidden">
+            <h2>Топ Аніме</h2>
+            <div class="movie-list" id="anime-sections"></div>
+        </div>
     </div>
 
     <script>
-        const apiKey = '401d0beb7a9921aab51e75a21ec538f9'; // Замініть на ваш ключ TMDb API
+        const apiKey = '401d0beb7a9921aab51e75a21ec538f9'; // Ваш ключ TMDb API
+
+        /* Відкриття та закриття бічної панелі */
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
 
         /* Показати конкретну секцію */
         function showSection(sectionId) {
@@ -159,7 +238,7 @@
             // Завантаження фільмів для кожної категорії
             fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`, 'movie-sections'); // Фільми
             fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'series-sections'); // Серіали
-            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'cartoons-sections'); // Мультфільми
+            fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'cartoons-sections'); // Мультфільми
             fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16&with_keywords=210024`, 'anime-sections'); // Аніме
         }
 
