@@ -51,8 +51,8 @@
             background-color: #557eab;
         }
 
-        /* Рекламний блок */
-        .ads-container {
+        /* Відео блок */
+        .video-container {
             margin: 20px 0;
             padding: 10px;
             background-color: #30363d;
@@ -65,6 +65,12 @@
             border: 1px solid #4a4a4a;
         }
 
+        video {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 5px;
+        }
+
         /* Стилі для посилань */
         a {
             color: #4a76a8;
@@ -74,25 +80,18 @@
             text-decoration: underline;
         }
     </style>
-
-    <!-- Додавання бібліотеки AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2244537573400519" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <div class="container">
         <h1>Перегляньте рекламу, щоб отримати код</h1>
 
-        <!-- Блок для показу реклами -->
-        <div class="ads-container">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-2244537573400519"  <!-- Ідентифікатор клієнта AdSense -->
-                 data-ad-slot="1336927197"                    <!-- ID рекламного блоку -->
-                 data-ad-format="auto"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+        <!-- Блок для відеореклами -->
+        <div class="video-container">
+            <video id="adVideo" controls>
+                <source src="your-video-file.mp4" type="video/mp4"> <!-- Вставте URL вашого відеофайлу -->
+                Ваш браузер не підтримує відео.
+            </video>
         </div>
 
         <!-- Кнопка для підтвердження перегляду реклами -->
@@ -102,8 +101,13 @@
     <script>
         // JavaScript для підтвердження перегляду реклами
         function confirmAdViewed() {
-            alert("Перегляд реклами підтверджено!");
-            // Сюди можна додати логіку для відправки на сервер
+            const video = document.getElementById('adVideo');
+            if (video.currentTime >= video.duration) {
+                alert("Перегляд реклами підтверджено!");
+                // Сюди можна додати логіку для відправки на сервер
+            } else {
+                alert("Будь ласка, перегляньте рекламу до кінця!");
+            }
         }
     </script>
 </body>
