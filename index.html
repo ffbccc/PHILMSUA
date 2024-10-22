@@ -81,6 +81,7 @@
             padding: 10px;
             width: 150px;
             text-align: center;
+            cursor: pointer;
         }
 
         .movie-item img {
@@ -134,18 +135,60 @@
             cursor: pointer;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 20px;
-            }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
 
-            .btn {
-                font-size: 14px;
-            }
+        .modal-content {
+            background-color: #333;
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            text-align: center;
+            color: #ffffff;
+        }
 
-            .socials a {
-                font-size: 18px;
-            }
+        .modal-content img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .rating-section {
+            margin-top: 20px;
+        }
+
+        .rating-section label {
+            font-size: 18px;
+        }
+
+        .rating-section input[type="number"] {
+            padding: 5px;
+            margin: 5px;
+            width: 60px;
         }
     </style>
 </head>
@@ -193,8 +236,25 @@
         </div>
     </div>
 
+    <!-- Модальне вікно для детальної інформації -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-poster" src="" alt="">
+            <p id="modal-overview"></p>
+
+            <div class="rating-section">
+                <label for="rating">Оцініть фільм:</label>
+                <input type="number" id="rating" min="1" max="10" step="1">
+                <button onclick="submitRating()">Поставити оцінку</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const apiKey = '401d0beb7a9921aab51e75a21ec538f9'; // Ваш ключ TMDb API
+        let currentMovieId;
 
         /* Відкриття та закриття бічної панелі */
         function openNav() {
@@ -231,6 +291,7 @@
                         <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                         <p>${movie.title || movie.name}</p>
                     `;
+                    movieItem.addEventListener('click', () => openModal(movie));
                     movieList.appendChild(movieItem);
                 });
             }
@@ -240,6 +301,33 @@
             fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'series-sections'); // Серіали
             fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'cartoons-sections'); // Мультфільми
             fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16&with_keywords=210024`, 'anime-sections'); // Аніме
+        }
+
+        /* Відкрити модальне вікно з інформацією про фільм */
+        function openModal(movie) {
+            currentMovieId = movie.id;
+            document.getElementById('modal-title').textContent = movie.title || movie.name;
+            document.getElementById('modal-poster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+            document.getElementById('modal-overview').textContent = movie.overview;
+
+            document.getElementById('movieModal').style.display = 'block';
+        }
+
+        /* Закрити модальне вікно */
+        function closeModal() {
+            document.getElementById('movieModal').style.display = 'none';
+        }
+
+        /* Надіслати оцінку */
+        function submitRating() {
+            const rating = document.getElementById('rating').value;
+            if (rating >= 1 && rating <= 10) {
+                alert(`Ви поставили оцінку ${rating} фільму!`);
+                // Тут можна додати логіку для відправки оцінки на сервер
+                closeModal();
+            } else {
+                alert('Оцінка має бути від 1 до 10!');
+            }
         }
 
         loadPopularMovies(); // Викликати функцію для завантаження фільмів
