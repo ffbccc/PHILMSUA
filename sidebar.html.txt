@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar</title>
+    <style>
+        /* Загальні стилі */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2a2f35;
+            color: #d1d1d1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-content {
+            height: calc(100vh - 50px);
+            overflow-y: scroll;
+            width: 100%;
+        }
+
+        .nav-btns {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .nav-btn {
+            background-color: #4a76a8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            width: 150px;
+            text-align: center;
+        }
+
+        .nav-btn:hover {
+            background-color: #557eab;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #1f2328;
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .movie-section {
+            margin-top: 20px;
+        }
+
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .movie-item {
+            background-color: #333;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 10px;
+            width: 150px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .movie-item img {
+            border-radius: 10px;
+            width: 100%;
+            margin: 0; /* Видалено верхній і нижній відступ */
+            padding: 0; /* Видалено додаткові внутрішні відступи */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #1f2328;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #d1d1d1;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
+
+        .menu-icon {
+            font-size: 30px;
+            color: #ffffff;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+        }
+
+        .back-btn { /* Стиль для кнопки Назад */
+            background-color: #4a76a8;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background-color: #557eab;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="javascript:parent.closeNavMovieDetails()">&times;</a>
+        <a href="javascript:void(0)" onclick="javascript:parent.loadPopularMovies()">Популярне</a>
+        <a href="#">Рейтинг</a>
+        <a href="#">Завдання</a> 
+    </div>
+
+    <span class="menu-icon" onclick="javascript:parent.openNavMovieDetails()">&#9776;</span>
+
+</body>
+</html>
