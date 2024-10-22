@@ -87,6 +87,8 @@
         .movie-item img {
             border-radius: 10px;
             width: 100%;
+            margin: 0; /* Видалено верхній і нижній відступ */
+            padding: 0; /* Видалено додаткові внутрішні відступи */
         }
 
         .hidden {
@@ -134,6 +136,23 @@
             left: 15px;
             cursor: pointer;
         }
+
+        .back-btn { /* Стиль для кнопки Назад */
+            background-color: #4a76a8;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background-color: #557eab;
+        }
     </style>
 </head>
 <body>
@@ -146,7 +165,8 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="javascript:void(0)" onclick="loadPopularMovies()">Популярне</a>
         <a href="#">Рейтинг</a>
-        <a href="#">Завдання</a>
+        <a href="#" class="back-btn" onclick="goBackToPreviousSection()">Назад</a> 
+        <a href="#">Завдання</a> 
     </div>
 
     <!-- Основний контент сайту -->
@@ -182,6 +202,7 @@
 
     <script>
         const apiKey = '401d0beb7a9921aab51e75a21ec538f9'; // Ваш ключ TMDb API
+        let currentSection = null; // Зберігатимемо поточний розділ
 
         /* Відкриття та закриття бічної панелі */
         function openNav() {
@@ -198,12 +219,13 @@
                 section.classList.add('hidden');
             });
             document.getElementById(sectionId).classList.remove('hidden');
+            currentSection = sectionId; // Запам'ятовуємо поточний розділ
         }
 
         /* Завантаження популярних фільмів, серіалів, аніме та мультфільмів */
         async function loadPopularMovies() {
             // Функція для створення секції з фільмами
-            async function fetchMovies(url, sectionId) {
+            async function fetchMovies(url, sectionId, mediaType) {
                 const res = await fetch(url);
                 const data = await res.json();
                 const movies = data.results;
@@ -215,48 +237,85 @@
                     const movieItem = document.createElement('div');
                     movieItem.className = 'movie-item';
                     movieItem.innerHTML = `
-                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title || movie.name}">
                         <p>${movie.title || movie.name}</p>
                     `;
-                    movieItem.addEventListener('click', () => openMovieDetails(movie.id));
+                    movieItem.addEventListener('click', () => openMovieDetails(movie.id, mediaType));
                     movieList.appendChild(movieItem);
                 });
             }
 
             // Завантаження фільмів для кожної категорії
-            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`, 'movie-sections'); // Фільми
-            fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'series-sections'); // Серіали
-            fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'cartoons-sections'); // Мультфільми
-            fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16&with_keywords=210024`, 'anime-sections'); // Аніме
+            fetchMovies(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=uk-UA`, 'movie-sections', 'movie'); // Фільми
+            fetchMovies(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=uk-UA`, 'series-sections', 'tv'); // Серіали
+            fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16`, 'cartoons-sections', 'movie'); // Мультфільми
+            fetchMovies(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=uk-UA&with_genres=16&with_keywords=210024`, 'anime-sections', 'movie'); // Аніме
         }
 
         /* Відкриття нової вкладки з інформацією про фільм і трейлером */
-        async function openMovieDetails(movieId) {
-            const movieUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=uk-UA&append_to_response=videos`;
-            const res = await fetch(movieUrl);
-            const movie = await res.json();
-            
-            // Витягаємо трейлер з відео
-            const trailer = movie.videos.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+        async function openMovieDetails(movieId, mediaType = 'movie') {
+            const movieUrl = `https://api.themoviedb.org/3/${mediaType}/${movieId}?api_key=${apiKey}&language=uk-UA&append_to_response=credits,videos`;
+            const movieRes = await fetch(movieUrl);
+            const movie = await movieRes.json();
+            const trailer = movie.videos.results.find(video => video.type === 'Trailer');
 
-            // Створюємо URL для нової вкладки
             const newWindow = window.open();
             newWindow.document.write(`
                 <html>
                 <head>
-                    <title>${movie.title}</title>
+                    <title>${movie.title || movie.name}</title>
+                    <style>
+                        body { background-color: #2a2f35; color: #d1d1d1; text-align: center; font-family: Arial, sans-serif; }
+                        img { max-width: 300px; margin: 20px 0; border-radius: 10px; }
+                        iframe { margin: 20px 0; }
+                        .info { margin: 20px; text-align: left; display: inline-block; max-width: 600px; }
+                        h1 { color: #ffffff; }
+                    </style>
                 </head>
-                <body style="background-color: #2a2f35; color: #d1d1d1; text-align: center;">
-                    <h1>${movie.title}</h1>
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <p>${movie.overview}</p>
-                    ${trailer ? `<iframe width="560" height="315" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>` : '<p>Трейлер не знайдено</p>'}
+                <body>
+                    <iframe id="mySidebarMovie" src="sidebar.html" style="width: 0; height: 100%; position: fixed; z-index: 1; top: 0; left: 0; background-color: #1f2328; overflow-x: hidden; transition: 0.5s; padding-top: 60px;"></iframe>
+                    <span class="menu-icon" onclick="openNavMovieDetails()">&#9776;</span>
+                    <h1>${movie.title || movie.name} (${new Date(movie.release_date || movie.first_air_date).getFullYear()})</h1>
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title || movie.name}">
+                    <div class="info">
+                        <h3>Огляд:</h3>
+                        <p>${movie.overview || 'Опис відсутній.'}</p>
+
+                        <h3>Акторський склад:</h3>
+                        <ul>
+                            ${movie.credits.cast.slice(0, 5).map(actor => `<li>${actor.name} - ${actor.character}</li>`).join('')}
+                        </ul>
+                        <h3>Бюджет:</h3>
+                        <p>${movie.budget ? `$${movie.budget.toLocaleString()}` : 'Немає даних про бюджет.'}</p>
+                        <h3>Збори:</h3>
+                        <p>${movie.revenue ? `$${movie.revenue.toLocaleString()}` : 'Немає даних про збори.'}</p>
+
+                        ${trailer ? `<h3>Трейлер:</h3><iframe width="560" height="315" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>` : '<p>Трейлер не знайдено</p>'}
+                    </div>
+                    <script>
+                        function openNavMovieDetails() {
+                            document.getElementById("mySidebarMovie").style.width = "250px";
+                        }
+
+                        function closeNavMovieDetails() {
+                            document.getElementById("mySidebarMovie").style.width = "0";
+                        }
+                    </script>
                 </body>
                 </html>
             `);
         }
 
-        loadPopularMovies(); // Викликати функцію для завантаження фільмів
+        // Функція для повернення до попереднього розділу
+        function goBackToPreviousSection() {
+            if (currentSection) {
+                showSection(currentSection);
+                closeNav(); // Закриваємо шторку після повернення
+            }
+        }
+
+        // Ініціалізуємо завантаження даних після завантаження сторінки
+        window.onload = loadPopularMovies;
     </script>
 </body>
 </html>
