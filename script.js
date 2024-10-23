@@ -9,7 +9,6 @@ async function getImageByTitle(title) {
     if (response.ok) {
         const data = await response.json();
         if (data.results.length > 0) {
-            // Повертаємо перше зображення, якщо знайдено
             const firstResult = data.results[0];
             if (firstResult.poster_path) {
                 return `https://image.tmdb.org/t/p/w500${firstResult.poster_path}`;
@@ -33,11 +32,9 @@ async function loadContentFromFile(file) {
         let contentDiv = document.getElementById('content');
         contentDiv.innerHTML = ''; // Очищуємо попередній контент
 
-        // Завантажуємо зображення для кожного елемента
         for (const line of lines) {
-            const [title, link] = line.split(' - '); // Отримуємо назву та посилання
-
-            const imageUrl = await getImageByTitle(title); // Отримуємо зображення за назвою
+            const [title, link] = line.split(' - ');
+            const imageUrl = await getImageByTitle(title);
 
             const itemDiv = document.createElement('div');
             itemDiv.innerHTML = `
@@ -52,9 +49,16 @@ async function loadContentFromFile(file) {
     }
 }
 
-// Завантаження контенту для кожної вкладки з відповідного файлу
+// Кнопка для відкриття/закриття шторки
+const toggleButton = document.getElementById('toggle-button');
+const sidebar = document.getElementById('sidebar');
+toggleButton.addEventListener('click', () => {
+    sidebar.classList.toggle('open'); // Додає/прибирає клас для шторки
+    document.body.classList.toggle('sidebar-open'); // Додає/прибирає клас для тіла
+});
+
+// Завантаження контенту для кожної вкладки
 document.getElementById('anime-tab').addEventListener('click', () => loadContentFromFile('anime.txt'));
 document.getElementById('movies-tab').addEventListener('click', () => loadContentFromFile('films.txt'));
 document.getElementById('series-tab').addEventListener('click', () => loadContentFromFile('series.txt'));
 document.getElementById('cartoons-tab').addEventListener('click', () => loadContentFromFile('cartoons.txt'));
-
