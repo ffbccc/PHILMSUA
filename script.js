@@ -57,3 +57,4 @@ document.getElementById('anime-tab').addEventListener('click', () => loadContent
 document.getElementById('movies-tab').addEventListener('click', () => loadContentFromFile('films.txt'));
 document.getElementById('series-tab').addEventListener('click', () => loadContentFromFile('series.txt'));
 document.getElementById('cartoons-tab').addEventListener('click', () => loadContentFromFile('cartoons.txt'));
+
