@@ -11,18 +11,17 @@ async function loadContentFromFile(file) {
         contentDiv.innerHTML = ''; // Очищуємо попередній контент
 
         lines.forEach(line => {
-            const [title] = line.split(' - '); // Отримуємо лише назву (без посилання)
+            const [title, link, imageUrl] = line.split(' - '); // Отримуємо назву, посилання та URL зображення
+            
             const itemDiv = document.createElement('div');
-            itemDiv.innerHTML = `<h3>${title}</h3>`;
+            itemDiv.innerHTML = `
+                <h3>${title}</h3>
+                <a href="${link}" target="_blank">Детальніше</a>
+                <img src="${imageUrl}" alt="${title}" style="width:200px; height:auto;">
+            `;
             contentDiv.appendChild(itemDiv);
         });
     } else {
         console.error('Помилка завантаження файлу:', response.status);
     }
 }
-
-// Завантаження контенту для кожної вкладки з відповідного файлу
-document.getElementById('anime-tab').addEventListener('click', () => loadContentFromFile('anime.txt'));
-document.getElementById('movies-tab').addEventListener('click', () => loadContentFromFile('films.txt'));
-document.getElementById('series-tab').addEventListener('click', () => loadContentFromFile('series.txt'));
-document.getElementById('cartoons-tab').addEventListener('click', () => loadContentFromFile('cartoons.txt'));
