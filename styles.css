@@ -3,7 +3,7 @@ body {
     background-color: #001f3f; /* Темно синій фон */
     color: white;
     margin: 0;
-    transition: margin-left 0.3s; /* Анімація при зміні margin */
+    overflow: hidden; /* Сховати скролінг */
 }
 
 .sidebar {
@@ -26,6 +26,7 @@ body {
 .content {
     padding: 20px;
     transition: margin-left 0.3s; /* Анімація для контенту */
+    margin-left: 0; /* Початковий відступ для контенту */
 }
 
 #toggle-button {
