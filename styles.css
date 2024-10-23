@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0a3d62;
+    color: #fff;
+    margin: 0;
+}
+
+header {
+    background-color: #1c73c2;
+    padding: 15px;
+    text-align: center;
+}
+
+.sidebar {
+    background-color: #1c3c60;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    padding: 15px;
+}
+
+.sidebar nav ul li button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    text-align: left;
+    padding: 15px;
+}
+
+main {
+    margin-left: 200px;
+    padding: 20px;
+}
+
+#content img {
+    width: 100px;
+    height: 150px;
+    margin: 10px;
+}
