@@ -55,7 +55,6 @@ const sidebar = document.getElementById('sidebar');
 
 toggleButton.addEventListener('click', () => {
     sidebar.classList.toggle('open'); // Додає/прибирає клас для шторки
-    document.body.classList.toggle('sidebar-open'); // Додає/прибирає клас для тіла
 });
 
 // Завантаження контенту для кожної вкладки
