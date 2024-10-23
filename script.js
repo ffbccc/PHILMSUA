@@ -52,6 +52,7 @@ async function loadContentFromFile(file) {
 // Кнопка для відкриття/закриття шторки
 const toggleButton = document.getElementById('toggle-button');
 const sidebar = document.getElementById('sidebar');
+
 toggleButton.addEventListener('click', () => {
     sidebar.classList.toggle('open'); // Додає/прибирає клас для шторки
     document.body.classList.toggle('sidebar-open'); // Додає/прибирає клас для тіла
@@ -62,3 +63,8 @@ document.getElementById('anime-tab').addEventListener('click', () => loadContent
 document.getElementById('movies-tab').addEventListener('click', () => loadContentFromFile('films.txt'));
 document.getElementById('series-tab').addEventListener('click', () => loadContentFromFile('series.txt'));
 document.getElementById('cartoons-tab').addEventListener('click', () => loadContentFromFile('cartoons.txt'));
+
+// Кнопка "Назад"
+document.getElementById('back-button').addEventListener('click', () => {
+    sidebar.classList.remove('open'); // Закриваємо шторку
+});
