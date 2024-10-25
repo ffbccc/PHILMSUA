@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #2c2f33; /* Темно-синій фон */
+    color: white;
+}
+
+header {
+    background: #1c1f22; /* Темніше синій */
+    padding: 10px 0;
+    text-align: center; /* Центрування вкладок */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+nav ul li a:hover {
+    background: #7289da; /* Світліший відтінок при наведенні */
+}
+
+.section {
+    margin: 20px;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Центрування галереї */
+}
+
+.gallery img {
+    width: 200px;
+    height: 300px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
